@@ -2,7 +2,7 @@
 
 import os
 import re
-import time 
+import time
 import json
 import shutil
 import pyudev
@@ -15,7 +15,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 
-class saltedd (FileSystemEventHandler):  
+class saltedd (FileSystemEventHandler):
     def __init__(self):
         self.downloads = Path.home() / "Downloads"
         self.waiting   = self.downloads / ".salted_waiting"
@@ -40,7 +40,7 @@ class saltedd (FileSystemEventHandler):
                 "images":(Path.home() / "Pictures",[".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp", ".tiff", ".ico", ".heic"]),
 
                 "audio":(Path.home() / "Music",[".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aac", ".wma"]),
-                
+
                 "video": (Path.home() / "Videos",[".mp4", ".mkv", ".mov", ".avi", ".webm", ".flv", ".wmv"]),
 
                 "archives": (Path.home() / "Archives",[".zip", ".tar", ".gz", ".rar", ".7z", ".bz2", ".xz", ".tar.gz"]),
@@ -67,7 +67,7 @@ class saltedd (FileSystemEventHandler):
         else:
             data = self.DEFAULT_CONFIG
         return data
-    
+
     def save_config(self, data=None):
         if data is None:
             data = self.load_config()
@@ -106,7 +106,7 @@ class saltedd (FileSystemEventHandler):
                 if fields[0] == devname:
                     return fields[1]
             return None
- 
+
     def block_mount(self, stuff, wait=3, max_wait=60):
         mountpoint = self.themountpoint(stuff['Partition'])
         if mountpoint is not None:
@@ -175,7 +175,7 @@ class saltedd (FileSystemEventHandler):
                     extensions = entry["extensions"]
                 else:
                     destination_path, extensions = entry
-                    
+
                 if path.suffix not in extensions:
                     continue
                 try:
@@ -208,7 +208,7 @@ class saltedd (FileSystemEventHandler):
         except shutil.Error as e:
             match = re.search(r"'(.*?)'", str(e.args))
             pathe = match.group(1) if match else None
-            
+
             folder = os.path.dirname(pathe)
             filename= os.path.basename(pathe)
             name,ext = os.path.splitext(filename)
@@ -233,19 +233,19 @@ class saltedd (FileSystemEventHandler):
     def update_progress(self, notif_id, message):
         if not notif_id: return
         subprocess.run(["notify-send", "-r", notif_id, "Salted", message])
-    
+
     def copy_with_progress(self, src, dst):
         chunk_size = 1024 * 1024
         min_size   = 50 * 1024 * 1024
         copied = 0
         last_change = -1
-        total_size = src.stat().st_size 
-        
+        total_size = src.stat().st_size
+
         if total_size <= min_size:
             shutil.copy2(src, dst)
             return
         message = f"Copying {src.name}..."
-        
+
         with open(src, "rb") as fsrc, open(dst, "wb") as fdst:
             notif_id = self.start_progress(message)
             while True:
@@ -270,7 +270,7 @@ class saltedd (FileSystemEventHandler):
         self.track_file(path)
         self.salthem(path)
 
-    
+
     def swip(self, path=None):
         is_default = path is None
         if path is None:
@@ -279,7 +279,7 @@ class saltedd (FileSystemEventHandler):
             self.salthem(f)
         if is_default:
             threading.Timer(1800, self.swip).start()
-        
+
     def reload(self):
         data = self.load_config()
         changed = False
