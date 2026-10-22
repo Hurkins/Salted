@@ -170,3 +170,10 @@ source venv/bin/activate
   left at the destination.
 - Extensions listed in more than one category behave unpredictably.
 - Linux only.
+- Tools that write the final filename directly (wget, curl -o) can trigger a copy while the file is still being      written. Browsers avoid this with temporary extensions. Salted could move a half-downloaded file and delete the    original.
+
+## License
+
+Copyright © 2026 Hurkins
+
+This project is licensed under the GNU Affero General Public License v3.0. See the `LICENSE` file for details.
