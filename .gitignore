@@ -1,0 +1,21 @@
+# virtual environments
+venv/
+.venv/
+
+# python caches
+__pycache__/
+*.pyc
+
+# personal config (real paths and drive UUIDs). The live copy is in
+# ~/.config/salted/, this just guards against a copy landing in the repo
+config.json
+
+# logs and test leftovers
+*.log
+bigtest*
+
+# editor / OS files
+.vscode/
+.idea/
+*.swp
+.DS_Store
